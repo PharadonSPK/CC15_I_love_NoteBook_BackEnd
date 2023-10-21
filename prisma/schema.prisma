@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  phoneNumber String?  @unique
+  email       String?  @unique
+  password    String
+  address     String?
+  subdistrict String?
+  province    String?
+  country     String?
+  zipcode     String?
+  isAdmin     Boolean  @default(false)
+  Cart        Cart[]
+  Orders      Orders[]
+}
+
+model Cart {
+  id         Int      @id @default(autoincrement())
+  quantity   String
+  total      String
+  Users      Users    @relation(fields: [usersId], references: [id])
+  usersId    Int
+  Products   Products @relation(fields: [productsId], references: [id])
+  productsId Int
+}
+
+//Users Users /result alt+shilft+f
+model Orders {
+  id           Int          @id @default(autoincrement())
+  status       orderStatus
+  date         DateTime     @default(now())
+  tranfer_slip String
+  userId       Int
+  Users        Users        @relation(fields: [userId], references: [id])
+  orderItems   orderItems[]
+}
+
+enum orderStatus {
+  ACCEPTED
+  PENDING
+}
+
+model orderItems {
+  id         Int      @id @default(autoincrement())
+  quantity   Int
+  totalprice Int
+  ordersId   Int
+  Orders     Orders   @relation(fields: [ordersId], references: [id])
+  productsId Int
+  Products   Products @relation(fields: [productsId], references: [id])
+}
+
+model Products {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal?     @db.Decimal(10, 2)
+  brandId     Int
+  imageUrl    String?
+  Brand       Brand        @relation(fields: [brandId], references: [id])
+  orderItems  orderItems[]
+  cart        Cart[]
+}
+
+model Brand {
+  id       Int        @id @default(autoincrement())
+  bandname String
+  Products Products[]
+}
