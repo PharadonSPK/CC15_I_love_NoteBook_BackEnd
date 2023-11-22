@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
       data: { ...value, password: await bcrypt.hash(value.password, 12) },
     });
 
-    res.json(createdUser);
+    res.status(200).json(createdUser);
     // res.json("dsfgdthfghj");
     // console.log(value);
     // value.password = await bcrypt.hash(value.password, 12);

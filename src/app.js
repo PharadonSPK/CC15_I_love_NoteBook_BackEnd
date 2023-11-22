@@ -16,7 +16,7 @@ app.use(cors());
 app.use(morgan("dev")); //combined=requestมาตอนกี่โมง,dev=requestโ
 app.use(express.json());
 app.use(express.static("public"));
-app.use(rateLimitMiddleware);
+// app.use(rateLimitMiddleware);
 app.use(express.json());
 
 app.use("/auth", authRoute);
